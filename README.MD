@@ -28,3 +28,21 @@ A secure community feed where users can share strategies without stigma. The bac
    ```bash
    git clone [https://github.com/YOUR_USERNAME/forge-app.git](https://github.com/YOUR_USERNAME/forge-app.git)
    cd forge-app
+
+2. Install dependencies:
+
+Bash
+pip install -r requirements.txt
+
+3. Run database migrations:
+
+Bash
+python manage.py migrate
+
+4. Start the Forge Server:
+
+Bash
+python manage.py runserver
+
+5. Navigate to http://127.0.0.1:8000/ in your browser.
+

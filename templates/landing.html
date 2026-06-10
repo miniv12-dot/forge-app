@@ -3,111 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forge | The Mental Operating System for Men</title>
+    <title>Forge | Habit Tracker & Community for Men</title>
     <style>
         /* --- MODERN CSS VARIABLES --- */
         :root { 
-            --bg: #09090b; /* Ultra-dark, almost black */
-            --card: rgba(26, 26, 26, 0.6); /* Transparent for glass effect */
+            --bg: #09090b; 
+            --card: rgba(26, 26, 26, 0.6); 
             --card-border: rgba(255, 255, 255, 0.1);
-            --primary: #E53935; /* Punchy red */
+            --primary: #E53935; 
             --primary-glow: rgba(229, 57, 53, 0.4);
+            --warm-glow: rgba(255, 112, 67, 0.15);
             --text: #ffffff; 
             --subtext: #a1a1aa; 
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background-color: var(--bg); 
+            background-image: 
+                radial-gradient(circle at 50% 0%, var(--warm-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 100%, rgba(229, 57, 53, 0.08) 0%, transparent 50%);
+            color: var(--text); 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth;
+        }
+
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
         
         /* --- GLASSMORPHISM NAVBAR --- */
         .navbar { 
             position: fixed; top: 0; width: 100%; z-index: 100;
             padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; 
-            background: rgba(9, 9, 11, 0.8); 
-            backdrop-filter: blur(12px); /* The Frosted Glass Effect */
+            background: rgba(9, 9, 11, 0.85); 
+            backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--card-border);
         }
-        .navbar h1 { color: var(--text); font-size: 1.8em; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; }
+        .navbar h1 { color: var(--text); font-size: 1.8em; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .navbar h1:hover { opacity: 0.8; }
         .navbar h1 span { color: var(--primary); }
         .nav-links a { color: var(--subtext); text-decoration: none; margin-left: 30px; font-weight: 600; transition: color 0.3s; font-size: 0.95em; }
         .nav-links a:hover { color: var(--text); }
         .nav-btn { background: var(--primary); color: white !important; padding: 10px 24px; border-radius: 6px; box-shadow: 0 0 15px var(--primary-glow); transition: 0.3s !important; }
         .nav-btn:hover { background: #f44336; box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); }
 
-        /* --- HERO SECTION WITH GLOW --- */
+        /* --- HERO SECTION --- */
         .hero { 
-            position: relative; padding: 180px 5% 100px; text-align: center; max-width: 900px; margin: auto; 
+            position: relative; padding: 180px 5% 80px; text-align: center; max-width: 1000px; margin: auto; 
             animation: fadeUp 1s ease-out forwards; opacity: 0; transform: translateY(30px);
         }
-        /* Background abstract glow */
-        .hero::before {
-            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
-            width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-            z-index: -1; filter: blur(60px);
+        
+        .trust-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border);
+            padding: 6px 16px; border-radius: 50px; font-size: 0.85em; font-weight: 600;
+            color: var(--subtext); margin-bottom: 25px; backdrop-filter: blur(10px);
         }
+        .trust-badge span { color: var(--primary); font-size: 1.2em; line-height: 0; }
+
         .hero h2 { font-size: 4em; margin-bottom: 25px; line-height: 1.1; letter-spacing: -1px; }
-        .hero p { font-size: 1.25em; color: var(--subtext); margin-bottom: 45px; max-width: 600px; margin-inline: auto; }
+        .hero p { font-size: 1.2em; color: var(--subtext); margin-bottom: 45px; max-width: 700px; margin-inline: auto; line-height: 1.7; }
+        .hero p strong { color: var(--text); }
+        
         .btn-main { 
             background: var(--text); color: var(--bg); padding: 18px 45px; font-size: 1.1em; font-weight: bold; 
-            text-decoration: none; border-radius: 50px; transition: 0.3s; display: inline-block; 
+            text-decoration: none; border-radius: 50px; transition: 0.3s; display: inline-block; position: relative; z-index: 10;
         }
         .btn-main:hover { background: var(--primary); color: white; box-shadow: 0 10px 30px var(--primary-glow); transform: translateY(-3px); }
 
-        /* --- HIGH-AESTHETIC FEATURE CARDS --- */
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px; padding: 50px 5% 120px; max-width: 1200px; margin: auto; }
+        /* --- NEW: CINEMATIC HERO IMAGE --- */
+        .hero-image-wrapper {
+            margin-top: 60px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 40px rgba(229, 57, 53, 0.15);
+            animation: fadeUp 1.2s ease-out 0.4s forwards;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        
+        /* Fades the bottom of the image into the dark background */
+        .hero-image-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(9, 9, 11, 0.1) 40%, rgba(9, 9, 11, 1) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .hero-image-wrapper img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.8s ease;
+        }
+        
+        .hero-image-wrapper:hover img { transform: scale(1.02); }
+
+        /* --- THE SYSTEM (LOGIC FLOW) --- */
+        .system-section { padding: 40px 5% 120px; max-width: 1200px; margin: auto; position: relative; z-index: 5; }
+        .system-header { text-align: center; margin-bottom: 60px; }
+        .system-header h2 { font-size: 2.5em; letter-spacing: -0.5px; margin-bottom: 15px; }
+        .system-header p { color: var(--subtext); font-size: 1.1em; max-width: 600px; margin: auto; }
+
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px; position: relative; }
         
         .feature-card { 
-            /* The Glass Base */
             background: linear-gradient(145deg, rgba(30, 30, 30, 0.4) 0%, rgba(15, 15, 15, 0.8) 100%);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            
-            /* The Glass Edge Lighting */
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            
             padding: 45px 35px; 
-            border-radius: 20px; /* Softer, more modern corners */
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Buttery smooth animation */
+            border-radius: 20px; 
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
             position: relative; 
             overflow: hidden;
+            display: flex; flex-direction: column;
         }
 
-        /* The Hover State (Lift + Red Glow) */
         .feature-card:hover { 
             transform: translateY(-12px); 
             border-color: rgba(229, 57, 53, 0.3); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 
-                        0 0 40px rgba(229, 57, 53, 0.15), /* Outer Red Glow */
-                        inset 0 1px 0 rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 40px rgba(229, 57, 53, 0.15); 
         }
 
-        /* Gradient Icon Box */
+        .step-num { 
+            position: absolute; top: -10px; right: 10px; 
+            font-size: 8em; font-weight: 900; 
+            color: rgba(255,255,255,0.03); 
+            z-index: 0; pointer-events: none; transition: 0.4s;
+        }
+        .feature-card:hover .step-num { color: rgba(229, 57, 53, 0.08); transform: scale(1.05); }
+
         .icon-box { 
             background: linear-gradient(135deg, rgba(229, 57, 53, 0.2) 0%, rgba(229, 57, 53, 0.05) 100%);
-            width: 65px; height: 65px; 
-            border-radius: 14px; 
+            width: 65px; height: 65px; border-radius: 14px; 
             display: flex; justify-content: center; align-items: center; 
-            font-size: 2em; margin-bottom: 25px; 
-            color: var(--primary); 
+            font-size: 2em; margin-bottom: 25px; color: var(--primary); 
             border: 1px solid rgba(229, 57, 53, 0.3);
-            box-shadow: inset 0 0 20px rgba(229, 57, 53, 0.1);
-            transition: transform 0.4s ease;
+            position: relative; z-index: 1; transition: transform 0.4s ease;
         }
 
-        /* Make the icon pop when hovering the card */
-        .feature-card:hover .icon-box {
-            transform: scale(1.1) rotate(5deg);
-            border-color: rgba(229, 57, 53, 0.6);
-            background: linear-gradient(135deg, rgba(229, 57, 53, 0.3) 0%, rgba(229, 57, 53, 0.1) 100%);
-        }
+        .feature-card:hover .icon-box { transform: scale(1.1) rotate(5deg); background: linear-gradient(135deg, rgba(229, 57, 53, 0.3) 0%, rgba(229, 57, 53, 0.1) 100%); }
 
-        .feature-card h3 { color: #ffffff; font-size: 1.5em; margin-bottom: 15px; font-weight: 700; letter-spacing: -0.5px; }
-        .feature-card p { color: var(--subtext); font-size: 1.05em; line-height: 1.7; }
+        .feature-card h3 { color: #ffffff; font-size: 1.5em; margin-bottom: 15px; font-weight: 700; position: relative; z-index: 1; }
+        .feature-card p { color: var(--subtext); font-size: 1.05em; line-height: 1.7; position: relative; z-index: 1; }
+
+        /* --- NEW: AVATAR STACK FOR BROTHERHOOD CARD --- */
+        .avatar-stack { display: flex; align-items: center; margin-top: 20px; position: relative; z-index: 1; }
+        .avatar-stack img { 
+            width: 35px; height: 35px; border-radius: 50%; 
+            border: 2px solid #1a1a1a; margin-left: -10px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+            transition: 0.3s;
+        }
+        .avatar-stack img:first-child { margin-left: 0; }
+        .avatar-stack img:hover { transform: translateY(-3px) scale(1.1); z-index: 10; border-color: var(--primary); }
+        .avatar-stack span { margin-left: 12px; font-size: 0.85em; font-weight: bold; color: var(--primary); }
 
         /* --- FOOTER --- */
-        footer { border-top: 1px solid var(--card-border); padding: 40px 5%; text-align: center; color: var(--subtext); font-size: 0.9em; margin-top: 50px; }
+        footer { border-top: 1px solid var(--card-border); padding: 40px 5%; text-align: center; color: var(--subtext); font-size: 0.9em; margin-top: 20px; }
         
         /* --- ANIMATIONS --- */
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
@@ -119,49 +185,84 @@
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
             .hero h2 { font-size: 2.5em; }
-            .nav-links { display: none; } /* Hamburger menu hidden for simplicity */
+            .nav-links { display: none; }
             .navbar { padding: 15px 5%; }
             .hero { padding: 140px 5% 80px; }
+            .hero-image-wrapper { margin-top: 40px; }
+            .hero-image-wrapper img { max-height: 300px; }
         }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <h1>For<span>ge.</span></h1>
+        <h1 onclick="window.location.href='/'">For<span>ge.</span></h1>
         <div class="nav-links">
-            <a href="#system">The System</a>
-            <a href="#community">Brotherhood</a>
-            <a href="/app/" class="nav-btn">Enter App</a>
+            <a href="#system">How It Works</a>
+           
+            <a href="/app/" class="nav-btn">Access App</a>
         </div>
     </nav>
 
     <header class="hero">
-        <h2>Upgrade Your Mental<br>Operating System.</h2>
-        <p>A data-driven habit tracker, highly tactical insights, and a secure, anonymous brotherhood. Stop guessing why you feel burned out. Start tracking it.</p>
-        <a href="/app/" class="btn-main">Start Tracking Now</a>
-    </header>
+        <div class="trust-badge">
+            <span>🔥</span> Trusted by 2,500+ men leveling up
+        </div>
+        <h2>Build a Mind That<br>Doesn't Break.</h2>
+        <p>Most men ignore burnout and stress until it costs them. <strong>Forge is a simple 3-step app</strong> to track your daily habits, clear your head, and connect with a community that actually gets it.</p>
+        <a href="/app/" class="btn-main">Enter The System</a>
 
-    <section id="system" class="features">
-        <div class="feature-card stagger-1">
-            <div class="icon-box">📊</div>
-            <h3>The Action Calendar</h3>
-            <p>Log your sleep, training, and mental clarity daily. Our correlation engine mathematically proves what habits are destroying your energy.</p>
+        <!-- CINEMATIC HERO IMAGE -->
+        <!-- Sourced from Unsplash: A moody, warm/red tinted cinematic shot representing focus/action -->
+        <!-- UPDATED CINEMATIC HERO IMAGE -->
+        <div class="hero-image-wrapper">
+            <div class="hero-image-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop" alt="A focused man training in a dark, atmospheric environment">
         </div>
-        <div class="feature-card stagger-2">
-            <div class="icon-box">🧠</div>
-            <h3>Tactical Insights</h3>
-            <p>No fluff. Just science-backed strategies to manage cortisol, optimize sleep architecture, and identify silent burnout before it hits.</p>
+    <section id="system" class="system-section">
+        <div class="system-header">
+            <h2>How Forge Works</h2>
+            <p>No fluffy affirmations or complicated routines. Just simple tracking, practical advice, and a supportive community to help you get back on track.</p>
         </div>
-        <div class="feature-card stagger-3">
-            <div class="icon-box">🛡️</div>
-            <h3>Anonymous Brotherhood</h3>
-            <p>A highly secure community hub. Share your experiences and get advice. Your identity is strictly randomized by our backend anonymity engine.</p>
+
+        <div class="features">
+            <!-- Step 1 -->
+            <div class="feature-card stagger-1">
+                <div class="step-num">01</div>
+                <div class="icon-box">📊</div>
+                <h3>Track Your Days</h3>
+                <p>Stop guessing why you feel exhausted. Use our simple calendar to quickly log your sleep, stress, and workouts to see exactly what is draining your energy at a glance.</p>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="feature-card stagger-2">
+                <div class="step-num">02</div>
+                <div class="icon-box">🧠</div>
+                <h3>Clear Your Head</h3>
+                <p>Based on your logs, Forge gives you personalized, practical guides. Feeling stressed? Read our quick decompression guide. Stuck in a rut? Learn how to easily reset your motivation.</p>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="feature-card stagger-3">
+                <div class="step-num">03</div>
+                <div class="icon-box">🛡️</div>
+                <h3>Join the Brotherhood</h3>
+                <p>You don't have to figure it out alone. Jump into our completely anonymous feed to share what's on your mind and get honest, zero-judgment advice from other men.</p>
+                
+                <!-- NEW: VISUAL AVATAR STACK FOR SOCIAL PROOF -->
+                <div class="avatar-stack">
+                    <img src="https://i.pravatar.cc/100?img=11" alt="Member Avatar">
+                    <img src="https://i.pravatar.cc/100?img=12" alt="Member Avatar">
+                    <img src="https://i.pravatar.cc/100?img=33" alt="Member Avatar">
+                    <img src="https://i.pravatar.cc/100?img=14" alt="Member Avatar">
+                    <span>+2,500 Active Men</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Forge Analytics. Engineered for peak performance.</p>
+        <p>&copy; 2026 Forge Analytics. Built for a stronger mindset.</p>
     </footer>
 
 </body>
