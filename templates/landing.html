@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge | The Mental Operating System for Men</title>
+    <style>
+        /* --- MODERN CSS VARIABLES --- */
+        :root { 
+            --bg: #09090b; /* Ultra-dark, almost black */
+            --card: rgba(26, 26, 26, 0.6); /* Transparent for glass effect */
+            --card-border: rgba(255, 255, 255, 0.1);
+            --primary: #E53935; /* Punchy red */
+            --primary-glow: rgba(229, 57, 53, 0.4);
+            --text: #ffffff; 
+            --subtext: #a1a1aa; 
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        
+        /* --- GLASSMORPHISM NAVBAR --- */
+        .navbar { 
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(9, 9, 11, 0.8); 
+            backdrop-filter: blur(12px); /* The Frosted Glass Effect */
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+        }
+        .navbar h1 { color: var(--text); font-size: 1.8em; letter-spacing: 2px; text-transform: uppercase; font-weight: 900; }
+        .navbar h1 span { color: var(--primary); }
+        .nav-links a { color: var(--subtext); text-decoration: none; margin-left: 30px; font-weight: 600; transition: color 0.3s; font-size: 0.95em; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-btn { background: var(--primary); color: white !important; padding: 10px 24px; border-radius: 6px; box-shadow: 0 0 15px var(--primary-glow); transition: 0.3s !important; }
+        .nav-btn:hover { background: #f44336; box-shadow: 0 0 25px var(--primary-glow); transform: translateY(-2px); }
+
+        /* --- HERO SECTION WITH GLOW --- */
+        .hero { 
+            position: relative; padding: 180px 5% 100px; text-align: center; max-width: 900px; margin: auto; 
+            animation: fadeUp 1s ease-out forwards; opacity: 0; transform: translateY(30px);
+        }
+        /* Background abstract glow */
+        .hero::before {
+            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            z-index: -1; filter: blur(60px);
+        }
+        .hero h2 { font-size: 4em; margin-bottom: 25px; line-height: 1.1; letter-spacing: -1px; }
+        .hero p { font-size: 1.25em; color: var(--subtext); margin-bottom: 45px; max-width: 600px; margin-inline: auto; }
+        .btn-main { 
+            background: var(--text); color: var(--bg); padding: 18px 45px; font-size: 1.1em; font-weight: bold; 
+            text-decoration: none; border-radius: 50px; transition: 0.3s; display: inline-block; 
+        }
+        .btn-main:hover { background: var(--primary); color: white; box-shadow: 0 10px 30px var(--primary-glow); transform: translateY(-3px); }
+
+        /* --- HIGH-AESTHETIC FEATURE CARDS --- */
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 35px; padding: 50px 5% 120px; max-width: 1200px; margin: auto; }
+        
+        .feature-card { 
+            /* The Glass Base */
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.4) 0%, rgba(15, 15, 15, 0.8) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            
+            /* The Glass Edge Lighting */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            
+            padding: 45px 35px; 
+            border-radius: 20px; /* Softer, more modern corners */
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Buttery smooth animation */
+            position: relative; 
+            overflow: hidden;
+        }
+
+        /* The Hover State (Lift + Red Glow) */
+        .feature-card:hover { 
+            transform: translateY(-12px); 
+            border-color: rgba(229, 57, 53, 0.3); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 
+                        0 0 40px rgba(229, 57, 53, 0.15), /* Outer Red Glow */
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2); 
+        }
+
+        /* Gradient Icon Box */
+        .icon-box { 
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.2) 0%, rgba(229, 57, 53, 0.05) 100%);
+            width: 65px; height: 65px; 
+            border-radius: 14px; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 2em; margin-bottom: 25px; 
+            color: var(--primary); 
+            border: 1px solid rgba(229, 57, 53, 0.3);
+            box-shadow: inset 0 0 20px rgba(229, 57, 53, 0.1);
+            transition: transform 0.4s ease;
+        }
+
+        /* Make the icon pop when hovering the card */
+        .feature-card:hover .icon-box {
+            transform: scale(1.1) rotate(5deg);
+            border-color: rgba(229, 57, 53, 0.6);
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.3) 0%, rgba(229, 57, 53, 0.1) 100%);
+        }
+
+        .feature-card h3 { color: #ffffff; font-size: 1.5em; margin-bottom: 15px; font-weight: 700; letter-spacing: -0.5px; }
+        .feature-card p { color: var(--subtext); font-size: 1.05em; line-height: 1.7; }
+
+        /* --- FOOTER --- */
+        footer { border-top: 1px solid var(--card-border); padding: 40px 5%; text-align: center; color: var(--subtext); font-size: 0.9em; margin-top: 50px; }
+        
+        /* --- ANIMATIONS --- */
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        
+        .stagger-1 { animation: fadeUp 0.8s ease-out 0.2s forwards; opacity: 0; transform: translateY(30px); }
+        .stagger-2 { animation: fadeUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(30px); }
+        .stagger-3 { animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(30px); }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .hero h2 { font-size: 2.5em; }
+            .nav-links { display: none; } /* Hamburger menu hidden for simplicity */
+            .navbar { padding: 15px 5%; }
+            .hero { padding: 140px 5% 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <h1>For<span>ge.</span></h1>
+        <div class="nav-links">
+            <a href="#system">The System</a>
+            <a href="#community">Brotherhood</a>
+            <a href="/app/" class="nav-btn">Enter App</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h2>Upgrade Your Mental<br>Operating System.</h2>
+        <p>A data-driven habit tracker, highly tactical insights, and a secure, anonymous brotherhood. Stop guessing why you feel burned out. Start tracking it.</p>
+        <a href="/app/" class="btn-main">Start Tracking Now</a>
+    </header>
+
+    <section id="system" class="features">
+        <div class="feature-card stagger-1">
+            <div class="icon-box">📊</div>
+            <h3>The Action Calendar</h3>
+            <p>Log your sleep, training, and mental clarity daily. Our correlation engine mathematically proves what habits are destroying your energy.</p>
+        </div>
+        <div class="feature-card stagger-2">
+            <div class="icon-box">🧠</div>
+            <h3>Tactical Insights</h3>
+            <p>No fluff. Just science-backed strategies to manage cortisol, optimize sleep architecture, and identify silent burnout before it hits.</p>
+        </div>
+        <div class="feature-card stagger-3">
+            <div class="icon-box">🛡️</div>
+            <h3>Anonymous Brotherhood</h3>
+            <p>A highly secure community hub. Share your experiences and get advice. Your identity is strictly randomized by our backend anonymity engine.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Forge Analytics. Engineered for peak performance.</p>
+    </footer>
+
+</body>
+</html>
