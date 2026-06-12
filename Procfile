@@ -1,1 +1,1 @@
-web: gunicorn FORGE.wsgi:application
+web: gunicorn config.wsgi:application
