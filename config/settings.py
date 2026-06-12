@@ -135,4 +135,6 @@ REST_FRAMEWORK = {
     )
 }
 CORS_ALLOW_ALL_ORIGINS = True
-WSGI_APPLICATION = 'FORGE.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
