@@ -77,14 +77,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'forge_db',           # The name of the database we created in DBeaver
-        'USER': 'postgres',        # The user we granted privileges to
-        'PASSWORD': 'Mini', # Replace with the actual password you set
-        'HOST': 'localhost',          # Tells Django the database is on your local machine
-        'PORT': '5432',               # The default PostgreSQL port
+        'NAME': os.environ.get('DB_NAME', 'forge_db'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'Mini'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -138,3 +140,5 @@ CORS_ALLOW_ALL_ORIGINS = True
 WSGI_APPLICATION = 'config.wsgi.application'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+# Expire sessions instantly when the user closes their browser window
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forge | App Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
+  <style>
         /* --- CORE VARIABLES --- */
         :root { 
             --bg: #09090b; 
@@ -17,6 +17,7 @@
             --subtext: #a1a1aa; 
         }
         
+        /* --- GLOBAL RESETS --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; -webkit-tap-highlight-color: transparent; }
 
@@ -39,11 +40,18 @@
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- WELCOME BANNER --- */
-        .welcome-banner { background: linear-gradient(145deg, rgba(229, 57, 53, 0.15) 0%, rgba(15,15,15,0.8) 100%); border: 1px solid rgba(229, 57, 53, 0.3); padding: 25px 30px; border-radius: 16px; margin-bottom: 30px; display: flex; align-items: center; gap: 25px; backdrop-filter: blur(10px); }
+        /* --- WELCOME BANNER & ONBOARDING --- */
+        .welcome-banner { background: linear-gradient(145deg, rgba(229, 57, 53, 0.15) 0%, rgba(15,15,15,0.8) 100%); border: 1px solid rgba(229, 57, 53, 0.3); padding: 25px 30px; border-radius: 16px; margin-bottom: 30px; display: flex; align-items: center; gap: 25px; backdrop-filter: blur(10px); width: 100%; box-sizing: border-box; }
         .welcome-icon { font-size: 2.2em; color: var(--primary); background: rgba(229, 57, 53, 0.1); width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 14px; border: 1px solid rgba(229, 57, 53, 0.2); flex-shrink: 0; }
+        .welcome-text { flex: 1; min-width: 0; width: 100%; }
         .welcome-text h2 { margin: 0 0 8px 0; color: white; font-size: 1.4em; }
         .welcome-text p { margin: 0; color: var(--subtext); font-size: 0.95em; line-height: 1.5; }
+        
+        .onboarding-steps { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .step { display: flex; align-items: flex-start; gap: 12px; font-size: 0.95em; color: var(--subtext); line-height: 1.5; }
+        .step span { flex: 1; min-width: 0; white-space: normal; word-break: break-word; }
+        .step i { color: var(--primary); font-size: 1.1em; margin-top: 3px; width: 20px; text-align: center; flex-shrink: 0; }
+        .step strong { color: white; letter-spacing: 0.5px; }
 
         /* --- DESKTOP TABS --- */
         .tabs { display: flex; background: rgba(255,255,255,0.03); padding: 5px; border-radius: 14px; margin-bottom: 40px; border: 1px solid var(--card-border); box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); gap: 4px; }
@@ -87,9 +95,8 @@
 
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; position: relative; z-index: 2; }
         .day-name { text-align: center; color: var(--subtext); font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 10px; }
-        .cal-day { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.3s; min-height: 85px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; backdrop-filter: blur(10px); }
+        .cal-day { position: relative; background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 15px 10px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); min-height: 85px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; backdrop-filter: blur(10px); }
         .cal-day:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.3); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
-        .cal-day:active { transform: scale(0.95); }
         .cal-day.logged { border-color: var(--primary); background: rgba(229, 57, 53, 0.08); box-shadow: inset 0 0 15px var(--primary-glow); }
         .cal-day.today { border-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.05); }
         .cal-date { font-size: 1.3em; font-weight: 600; color: var(--text); margin-bottom: 5px; }
@@ -103,9 +110,13 @@
         .legend-item { display: flex; align-items: center; gap: 8px; font-weight: 500; }
         .legend-item i { font-size: 1.1em; }
 
-        /* --- GLASS CARDS --- */
+        /* --- GLASS CARDS & DIRECTIVES --- */
         .glass-card { background: linear-gradient(145deg, rgba(30,30,30,0.4) 0%, rgba(15,15,15,0.8) 100%); backdrop-filter: blur(16px); border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; transition: 0.4s; box-shadow: 0 4px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05); }
         
+        .daily-directive { margin-top: 35px; padding: 0 !important; display: flex; flex-direction: row; align-items: stretch; overflow: hidden; border: 1px solid var(--card-border); min-height: 180px; width: 100%; box-sizing: border-box; }
+        .directive-img-panel { width: 250px; background-size: cover; background-position: center; border-right: 1px solid var(--card-border); flex-shrink: 0; }
+        .directive-content-panel { padding: 30px; flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+
         /* --- GUIDES GRID --- */
         .insights-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; width: 100%; }
         .insight-card { display: flex; flex-direction: column; justify-content: space-between; padding: 25px; overflow: hidden; }
@@ -196,24 +207,46 @@
         .toast { position: fixed; bottom: -100px; right: 30px; background: var(--primary); color: white; padding: 15px 25px; border-radius: 10px; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: bottom 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 3000; display: flex; align-items: center; gap: 10px; }
         .toast.show { bottom: 30px; }
 
-        /* ========================================= */
-        /* MASSIVE UX UPGRADE: MOBILE APP NAVIGATION */
-        /* ========================================= */
+        /* --- PREMIUM BOUNCING EMOJI SELECTORS --- */
+        .emoji-selector { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; margin-bottom: 25px; }
+        .emoji-selector input[type="radio"] { display: none; }
+        .emoji-selector span { display: flex; align-items: center; justify-content: center; font-size: 1.8rem; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; cursor: pointer; transition: all 0.2s ease; filter: grayscale(100%); opacity: 0.5; }
+        .emoji-selector input[type="radio"]:checked + span { filter: grayscale(0%); opacity: 1; background: rgba(255, 255, 255, 0.15); transform: scale(1.15) translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.3); }
+
+        .cell-emoji { position: absolute; bottom: 5px; right: 5px; font-size: 1.5rem; animation: popIn 0.3s ease forwards; pointer-events: none; }
+
+        /* Satisfying 'Pop' entry animation */
+        @keyframes popIn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); box-shadow: 0 0 20px rgba(255, 74, 74, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 74, 74, 0.3); }
+        }
+
+        /* ======================================================= */
+        /* UNIFIED RESPONSIVE BREAKPOINTS (BOTTOM-MOST PREFERENCE) */
+        /* ======================================================= */
         @media (max-width: 768px) {
             .navbar { padding: 12px 20px; }
-            .welcome-banner { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
+            
+            .welcome-banner { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
+            .welcome-icon { margin: 0 auto; }
+            .step { text-align: left; }
+            
+            .daily-directive { flex-direction: column !important; align-items: stretch; min-height: auto; }
+            .directive-img-panel { width: 100% !important; height: 180px !important; border-right: none; border-bottom: 1px solid var(--card-border); }
+            .directive-content-panel { padding: 20px; text-align: center; align-items: center; }
+
             .insight-card.hero { flex-direction: column; }
             .hero-img-panel { width: 100% !important; min-height: 200px !important; border-right: none; border-bottom: 1px solid var(--card-border); }
             .insights-layout { grid-template-columns: 1fr; }
             .stats-hud { grid-template-columns: 1fr; gap: 10px; }
-            .daily-directive { flex-direction: column; text-align: center; }
-            .directive-img-panel { width: 100% !important; height: 180px; }
+            
             .guide-modal-content { padding: 25px; width: 100%; height: 100%; border-radius: 0; max-height: 100vh; }
             .modal-content { padding: 25px; width: 100%; height: auto; max-height: 90vh; border-radius: 20px 20px 0 0; position: absolute; bottom: 0; }
             .modal-overlay { align-items: flex-end; padding: 0; }
             
-            /* The Bottom Nav Transformation */
-            .container { padding-bottom: 90px; } /* Buffer for bottom nav */
+            /* Bottom Navigation Bar Transformation */
+            .container { padding-bottom: 90px; } 
             .tabs {
                 position: fixed;
                 bottom: 0;
@@ -227,7 +260,7 @@
                 border: none;
                 border-top: 1px solid var(--card-border);
                 border-radius: 20px 20px 0 0;
-                padding: 10px 5px 25px 5px; /* Extra padding for iOS home bar */
+                padding: 10px 5px 25px 5px; 
                 box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
                 gap: 0;
             }
@@ -244,12 +277,31 @@
     <div class="user-badge"><i class="fa-solid fa-user-shield"></i> Demo_User</div>
 </nav>
 
-<div class="container">
+<!-- ========================================= -->
+    <!--          UPGRADED WELCOME BANNER          -->
+    <!-- ========================================= -->
     <div class="welcome-banner">
-        <div class="welcome-icon"><i class="fa-solid fa-fire"></i></div>
+        <div class="welcome-icon">
+            <i class="fa-solid fa-fire"></i>
+        </div>
         <div class="welcome-text">
-            <h2>Welcome to your Mental Operating System.</h2>
-            <p>Forge is built to help men identify burnout and find direction. <strong>1. Track</strong> your daily habits to build a heatmap of your energy. <strong>2. Read</strong> the tactical guides to optimize your mindset. <strong>3. Connect</strong> anonymously with the Brotherhood.</p>
+            <h2>Welcome to your Mental Men's Health System.</h2>
+            <p style="margin-bottom: 15px;">Forge is built to help you identify burnout and find direction. Here is exactly how to use this tool:</p>
+            
+            <div class="onboarding-steps">
+                <div class="step">
+                    <i class="fa-solid fa-chart-line"></i> 
+                    <span><strong>1. Track (Diagnostics):</strong> Click a day on the calendar below to log your habits and build your energy heatmap.</span>
+                </div>
+                <div class="step">
+                    <i class="fa-solid fa-brain"></i> 
+                    <span><strong>2. Read (Guides):</strong> Switch tabs to read tactical, science-backed protocols to optimize your mindset.</span>
+                </div>
+                <div class="step">
+                    <i class="fa-solid fa-users"></i> 
+                    <span><strong>3. Connect (Brotherhood):</strong> Step into the secure feed to share strategies anonymously with other men.</span>
+                </div>
+            </div>
         </div>
     </div>
 

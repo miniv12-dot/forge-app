@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/5729621d-099b-4889-8e09-5f7238dabf1b/resourceGroups/appsvc_linux_southafricanorth/providers/Microsoft.Web/sites/forge-system-os",
+    "appService.deploySubpath": "."
+}
